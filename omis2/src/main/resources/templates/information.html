@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Информирование</title>
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        /* Стили навигации */
+        header nav {
+            display: flex;
+            justify-content: space-around;
+            background-color: #007bff;
+            padding: 10px;
+        }
+
+        header nav button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        header nav button:hover {
+            background-color: #0056b3;
+        }
+
+        header nav button.active {
+            background-color: #0056b3;
+        }
+
+        /* Основной контейнер */
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Заголовки */
+        main h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        main h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        /* Чекбоксы */
+        section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        section label {
+            margin: 0 10px;
+            font-size: 16px;
+        }
+
+        section input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        /* Таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Кнопки */
+        button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px 0;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:active {
+            background-color: #003d80;
+        }
+
+        /* Кнопка для добавления */
+        /*button:last-child {*/
+        /*    width: 100%;*/
+        /*}*/
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            header nav button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+
+            table th, table td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <button onclick="window.location.href='/omis2/users'">Пользователи</button>
+        <button onclick="window.location.href='/omis2/resources'">Управление ресурсами</button>
+        <button onclick="window.location.href='/omis2/information'">Информирование</button>
+    </nav>
+</header>
+<main>
+    <section>
+        <label>
+            <input type="radio" name="infoType" value="report" th:checked="${infoType == 'report'}" onclick="switchView('report')">
+            Отчёты
+        </label>
+        <label>
+            <input type="radio" name="infoType" value="notification" th:checked="${infoType == 'notification'}" onclick="switchView('notification')">
+            Уведомления
+        </label>
+    </section>
+
+    <script>
+        function switchView(viewType) {
+            if (viewType === 'report') {
+                location.href = '/omis2/information';
+            } else if (viewType === 'notification') {
+                location.href = '/omis2/information/notifications';
+            }
+        }
+    </script>
+
+
+    <!-- Секция отчётов -->
+    <div th:if="${infoType == 'report'}">
+        <h1>Список отчётов</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Пользователь</th>
+                <th>Описание</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="report : ${reports}">
+                <td th:text="${report.date}"></td>
+                <td th:text="${report.user.name}"></td>
+                <td th:text="${report.description}"></td>
+                <td>
+                    <a class="btn" th:href="@{'/omis2/information/edit/' + ${report.id}}">
+                        Изменить
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="btn" th:href="@{/omis2/information/add}">Добавить отчёт</a>
+    </div>
+
+    <!-- Секция уведомлений -->
+    <div th:if="${infoType == 'notification'}">
+        <h1>Список уведомлений</h1>
+        <table>
+            <thead>
+            <tr>
+                <th>Пользователь</th>
+                <th>Описание</th>
+                <th>Действия</th>>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="notification : ${notifications}">
+                <td th:text="${notification.user.name}"></td>
+                <td th:text="${notification.message}"></td>
+                <td>
+                    <a class="btn" th:href="@{'/omis2/information/notifications/edit/' + ${notification.id}}">
+                        Изменить
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="btn" th:href="@{/omis2/information/notifications/add}">Добавить уведомление</a>
+    </div>
+</main>
+</body>
+</html>

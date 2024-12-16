@@ -1,0 +1,62 @@
+/* Общие стили для body */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #ffffff; /* Белый фон */
+}
+
+/* Контейнер формы */
+div {
+    text-align: center;
+    margin-top: 35px;
+}
+
+/* Заголовок */
+h1 {
+    font-size: 36px;
+    color: #50c5dc; /* Голубой цвет */
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2); /* Тень текста */
+}
+
+/* Поля ввода */
+input[type="text"],
+input[type="password"] {
+    width: 300px;
+    height: 40px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px; /* Скругление углов */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Легкая тень */
+    font-size: 16px;
+}
+
+/* Стили для кнопки */
+button[type="submit"] {
+    background-color: #3498db; /* Ярко-синий цвет */
+    color: white; /* Белый текст */
+    border: none;
+    border-radius: 8px; /* Скругление углов */
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
+    transition: all 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #2980b9; /* Темно-синий при наведении */
+}
+
+/* Плейсхолдеры */
+input::placeholder {
+    color: #aaa; /* Серый цвет для текста в плейсхолдере */
+}
+
+/* Сообщение об ошибке */
+p {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+}

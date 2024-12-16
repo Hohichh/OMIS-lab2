@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление пользователями</title><!-- Подключите стили -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .navbar {
+            background-color: #007BFF;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .navbar a:hover {
+            background-color: #0056b3;
+        }
+        h1 {
+            color: #007BFF;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .filter-section {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            text-align: center;
+            padding: 10px;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Навигационная панель -->
+<div class="navbar">
+    <a href="/omis2/users">Пользователи</a>
+    <a href="/omis2/resources">Управление ресурсами</a>
+    <a href="/omis2/information">Информирование</a>
+</div>
+
+<h1>Управление пользователями</h1>
+
+<!-- Фильтры -->
+<div class="filter-section">
+    <form th:action="@{/omis2/users}" method="get">
+        <label>
+            <input type="radio" name="filter" value="all" th:checked="${filter == 'Все'}"> Все
+        </label>
+        <label>
+            <input type="radio" name="filter" value="residents" th:checked="${filter == 'Жители'}"> Жители
+        </label>
+        <label>
+            <input type="radio" name="filter" value="admins" th:checked="${filter == 'Администраторы'}"> Администраторы
+        </label>
+        <button type="submit" class="btn">Применить</button>
+    </form>
+</div>
+
+<!-- Таблица пользователей -->
+<table>
+    <thead>
+    <tr>
+        <th>ФИО</th>
+        <th>Email</th>
+        <th>Роль</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.getName()}"></td>
+        <td th:text="${user.getEmail()}"></td>
+        <td th:text="${user.getRole()}"></td>
+        <td>
+            <a th:href="@{'/omis2/users/edit/' + ${user.getId()}}" class="btn">Изменить</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- Кнопка добавления пользователя -->
+<a href="/omis2/users/add" class="btn">Добавить пользователя</a>
+</body>
+</html>
+

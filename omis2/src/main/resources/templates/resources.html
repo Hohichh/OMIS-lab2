@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Управление ресурсами</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        /* Общие стили */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        /* Стили навигации */
+        header nav {
+            /*display: flex;*/
+            /*justify-content: center;*/
+            /*background-color: #007bff;*/
+            /*padding: 10px;*/
+            background-color: #007BFF;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        header nav button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        header nav button:hover {
+            background-color: #0056b3;
+        }
+
+        header nav button.active {
+            background-color: #0056b3;
+        }
+
+        /* Основной контейнер */
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Заголовки */
+        main h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        main h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        /* Чекбоксы */
+        section {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        section label {
+            margin: 0 10px;
+            font-size: 16px;
+        }
+
+        section input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        /* Таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        /* Кнопки */
+        button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px 0;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:active {
+            background-color: #003d80;
+        }
+
+        /* Кнопка для добавления */
+        /*button:last-child {*/
+        /*    width: 100%;*/
+        /*}*/
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            header nav button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+
+            table th, table td {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            button {
+                font-size: 14px;
+                padding: 8px 15px;
+            }
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 14px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+<header>
+    <nav>
+        <button onclick="window.location.href='/omis2/users'">Пользователи</button>
+        <button onclick="window.location.href='/omis2/resources'">Управление ресурсами</button>
+        <button onclick="window.location.href='/omis2/information'">Информирование</button>
+    </nav>
+</header>
+
+<main>
+    <h1>Управление ресурсами</h1>
+
+    <section>
+        <label>
+            <input type="radio" name="viewType" value="resources" th:checked="${viewType == 'resources'}" onclick="switchView('resources')">
+            Ресурсы
+        </label>
+        <label>
+            <input type="radio" name="viewType" value="consuming" th:checked="${viewType == 'consuming'}" onclick="switchView('consuming')">
+            Потребление
+        </label>
+    </section>
+
+    <script>
+        function switchView(viewType) {
+            if (viewType === 'resources') {
+                location.href = '/omis2/resources';
+            } else if (viewType === 'consuming') {
+                location.href = '/omis2/resources/consuming';
+            }
+        }
+    </script>
+
+    <div th:if="${viewType == 'resources'}">
+        <h2>Список ресурсов</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Тип</th>
+                <th>Стоимость за единицу</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="resource : ${resources}">
+                <td th:text="${resource.type}">Тип ресурса</td>
+                <td th:text="${#numbers.formatDecimal(resource.costPerTimeUnit, 1, 2, 'COMMA')}">0.00</td>
+                <td>
+                    <a class="btn" th:href="@{'/omis2/resources/edit/' + ${resource.id}}">
+                        Изменить
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="btn" th:href="@{/omis2/resources/add}">Добавить ресурс</a>
+    </div>
+
+    <div th:if="${viewType == 'consuming'}">
+        <h2>Список потребления</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Период</th>
+                <th>Общая стоимость ресурсов</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="consuming : ${consumptions}">
+                <td th:text="${consuming.period}">01.01.2024 - 01.02.2024</td>
+                <td th:text="${#numbers.formatDecimal(consuming.cost, 1, 2, 'COMMA')}">0.00</td>
+                <td>
+                    <a class="btn" th:href="@{'/omis2/resources/consuming/edit/' + ${consuming.id}}">
+                        Изменить
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <a class="btn" th:href="@{/omis2/resources/consuming/add}">Добавить потребление</a>
+    </div>
+</main>
+
+
+</body>
+</html>
